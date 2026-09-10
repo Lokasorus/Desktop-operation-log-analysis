@@ -1,0 +1,27 @@
+# Datasets
+dataset_a/
+dataset_b/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Output
+segments.jsonl
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
