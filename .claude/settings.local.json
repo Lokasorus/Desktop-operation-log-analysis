@@ -4,7 +4,10 @@
       "Bash(python notebooks/01_explore_dataset_a.py)",
       "Bash(python3 notebooks/01_explore_dataset_a.py)",
       "Bash(python3 -m json.tool)",
-      "Bash(node src/explore_dataset_a.js)"
+      "Bash(node src/explore_dataset_a.js)",
+      "Bash(node src/segmentation.js dataset_a segments_a_test.jsonl)",
+      "Bash(timeout 30 node src/segmentation.js dataset_a segments_a_test.jsonl)",
+      "Bash(node src/test_single_session.js)"
     ]
   }
 }

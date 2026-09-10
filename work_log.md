@@ -1,44 +1,38 @@
-# Work Log
+## Day 1 - 2026-09-10 (Continued)
 
-## Day 1 - 2026-09-10
+### Evening: Initial Segmentation Results
 
-### Morning: Project Setup & Data Exploration
+**Built and tested segmentation algorithm:**
+- Created segmentation.js with boundary detection based on time gaps, app switches, and activity patterns
+- Tested on first session of Dataset A
 
-**Activities:**
-- Initialized git repository
-- Examined dataset structure:
-  - Dataset A: 63 sessions with ground truth (gt.jsonl, gt_manifest.json)
-  - Dataset B: 15 sessions without ground truth
-- Analyzed data schema:
-  - Events are in JSONL format with rich context (active apps, extracted text, screenshots)
-  - Ground truth shows process boundaries with timestamps
-  - Key event types: app_switch, keystroke, mouse_click, browser events, screenshots
-  - Processes span multiple domains: HR, Finance, Ops
+**Initial Results:**
+```
+Predicted segments: 59
+Ground truth boundaries: 31
+Matches (±5s tolerance): 31
+Precision: 0.525 (52.5%)
+Recall: 1.000 (100%)
+F1 Score: 0.689
+```
 
-**Key Observations:**
-1. **Sample Session Analysis** (ses_20260630-121953-LAPTOP-R36BQBTE):
-   - 9 different process types (codes A-O) from 3 domains
-   - Processes are heavily interleaved - worker switches between tasks frequently
-   - Process durations: 20 seconds to 1 minute per execution
-   - Same process repeats multiple times (e.g., process A executed 4 times)
-   - Applications used: Chrome, Excel, Notepad, OneNote, Outlook
+**Analysis:**
+- **Good news**: 100% recall means we're catching ALL real process boundaries
+- **Issue**: Over-segmentation - generating ~2x the correct number of boundaries
+- Root cause: Current algorithm is too aggressive with time gap detection
 
-2. **Challenges Identified:**
-   - Non-contiguous work: processes are suspended and resumed
-   - Rapid context switching between processes
-   - Same process has variants (e.g., process A: "std" vs "exc", process G: "reg" vs "adj")
-   - No explicit markers in events - must infer boundaries from behavior patterns
+**Refinement Strategy for Tomorrow:**
+1. Increase minimum gap threshold (5s → 8s)
+2. Add context-aware merging (merge segments with same app pattern)
+3. Use ground truth to tune parameters across all 63 sessions
+4. Aim for F1 score > 0.80 before applying to Dataset B
 
-3. **Ground Truth Structure:**
-   - Provides exact timestamps for process_started, process_switched_out, process_suspended, process_resumed
-   - Tracks case_id for each execution
-   - Shows which apps are used per process
-   - "expected_boundaries" list provides validation targets
+**Current Algorithm Approach:**
+- Time gaps ≥5s as primary boundary indicator
+- App switches with ≥2s gap as secondary indicator
+- Minimum segment duration: 10s
+- Simple app-based labeling (needs improvement)
 
-**Next Steps:**
-- Build event parser and feature extraction pipeline
-- Analyze patterns that correlate with process boundaries
-- Develop segmentation algorithm using Dataset A for validation
+**Time:** 17:30 UTC (Day 1 wrapping up)
 
-**Tools/AI Usage:**
-- Using Claude Code for project setup and code generation
+---
