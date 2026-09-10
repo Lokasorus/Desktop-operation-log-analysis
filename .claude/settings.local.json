@@ -7,7 +7,11 @@
       "Bash(node src/explore_dataset_a.js)",
       "Bash(node src/segmentation.js dataset_a segments_a_test.jsonl)",
       "Bash(timeout 30 node src/segmentation.js dataset_a segments_a_test.jsonl)",
-      "Bash(node src/test_single_session.js)"
+      "Bash(node src/test_single_session.js)",
+      "Bash(node src/improvedSegmentation.js)",
+      "Bash(node src/analyze_ground_truth.js)",
+      "Bash(node src/optimizedSegmentation.js)",
+      "Bash(timeout 15 node src/optimizedSegmentation.js)"
     ]
   }
 }
