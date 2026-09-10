@@ -1,0 +1,15 @@
+{
+  "name": "process-mining-automation",
+  "version": "1.0.0",
+  "description": "Process mining and automation opportunity analysis from desktop operation logs",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "explore": "node src/explore_dataset_a.js",
+    "segment": "node src/segmentation.js",
+    "analyze": "node src/analyze_dataset_b.js"
+  },
+  "keywords": ["process-mining", "automation", "rpa"],
+  "author": "",
+  "license": "MIT"
+}
