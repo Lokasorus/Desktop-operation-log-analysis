@@ -25,3 +25,11 @@ segments.jsonl
 # OS
 .DS_Store
 Thumbs.db
+
+# Local presentation materials
+/day2_roadmap.md
+/presentation_deck.md
+/presentation_script.md
+/VIEWING_GUIDE.md
+/demo_app/HOW_TO_GET_FREE_AI.md
+/demo_app/TESTING_GUIDE.md

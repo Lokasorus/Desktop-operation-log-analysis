@@ -240,44 +240,12 @@ python server.py
 
 ---
 
-## What to Show in a Presentation
+
 
 ### 1. Opening (30 seconds)
 - Open http://localhost:5000
 - Point out the professional UI
-- Mention: "This automates document processing, reducing time from 118s to 8s"
-
-### 2. Live Demo (2 minutes)
-- Click "Q4 Budget Proposal" - show quick approval
-- Click "Marketing Campaign Brief" - show error handling
-- Point to statistics dashboard - highlight 93% time savings
-
-### 3. Business Value (1 minute)
-- Focus on ROI section
-- Point out: "$3,820 annual savings"
-- Mention: "34 documents per period, 40.4 minutes saved"
-
-### 4. Technical Excellence (1 minute)
-- Mention AI integration (Llama 3.1 for free)
-- Show activity log for transparency
-- Explain validation rules
-
-### 5. Q&A Prompts
-**If asked: "Is it really that fast?"**
-- Show processing time: 2-3 seconds
-- Compare to manual: 118 seconds
-- Math: 118 - 3 = 115 seconds saved per document
-
-**If asked: "What if data is missing?"**
-- Demo the "Marketing Campaign Brief"
-- Show error handling
-- Explain AI can extract missing data
-
-**If asked: "What's the ROI?"**
-- Point to ROI calculator
-- $3,820/year for 34 documents/period
-- Scales with volume
-
+- Menti
 ---
 
 ## Troubleshooting
