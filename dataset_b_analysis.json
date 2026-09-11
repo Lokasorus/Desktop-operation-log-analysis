@@ -1,0 +1,61 @@
+{
+  "summary": {
+    "totalSegments": 64,
+    "sessions": 15,
+    "processes": 10,
+    "workers": 4
+  },
+  "topCandidates": [
+    {
+      "label": "microsoft_edge_openwith",
+      "impactScore": "1.56",
+      "feasibilityScore": "10.00",
+      "riskScore": "1.25",
+      "roiScore": "6.95",
+      "occurrences": 1,
+      "totalMinutes": "0.7",
+      "workers": 1
+    },
+    {
+      "label": "windowsterminal",
+      "impactScore": "3.97",
+      "feasibilityScore": "8.90",
+      "riskScore": "4.30",
+      "roiScore": "6.66",
+      "occurrences": 3,
+      "totalMinutes": "0.2",
+      "workers": 3
+    },
+    {
+      "label": "microsoft_edge_ms_teams",
+      "impactScore": "1.45",
+      "feasibilityScore": "10.00",
+      "riskScore": "1.25",
+      "roiScore": "6.46",
+      "occurrences": 1,
+      "totalMinutes": "0.4",
+      "workers": 1
+    },
+    {
+      "label": "notepad_windows_explorer",
+      "impactScore": "1.35",
+      "feasibilityScore": "10.00",
+      "riskScore": "1.25",
+      "roiScore": "6.01",
+      "occurrences": 1,
+      "totalMinutes": "0.1",
+      "workers": 1
+    },
+    {
+      "label": "procmine_desktop_agent_windowsterminal",
+      "impactScore": "1.33",
+      "feasibilityScore": "10.00",
+      "riskScore": "1.25",
+      "roiScore": "5.93",
+      "occurrences": 1,
+      "totalMinutes": "0.1",
+      "workers": 1
+    }
+  ],
+  "selectedForPrototype": "microsoft_edge_openwith"
+}

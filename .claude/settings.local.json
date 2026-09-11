@@ -11,7 +11,12 @@
       "Bash(node src/improvedSegmentation.js)",
       "Bash(node src/analyze_ground_truth.js)",
       "Bash(node src/optimizedSegmentation.js)",
-      "Bash(timeout 15 node src/optimizedSegmentation.js)"
+      "Bash(timeout 15 node src/optimizedSegmentation.js)",
+      "Bash(node src/finalSegmenter.js dataset_b segments.jsonl)",
+      "Bash(timeout 60 node src/finalSegmenter.js dataset_b segments.jsonl)",
+      "Bash(node src/batch_segment.js dataset_b segments.jsonl)",
+      "Bash(node src/analyze_dataset_b.js)",
+      "Bash(node src/revised_analysis.js)"
     ]
   }
 }
