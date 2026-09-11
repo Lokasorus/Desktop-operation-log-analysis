@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Processing Automation - Demo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>📄 Document Processing Automation</h1>
+            <p class="subtitle">AI-Powered Workflow Demo • 93% Faster Processing</p>
+            <div class="mode-indicator">
+                <span id="modeIndicator">🤖 Loading...</span>
+            </div>
+        </header>
+
+        <!-- Main Dashboard -->
+        <div class="dashboard">
+            <!-- Left Panel: Upload & Queue -->
+            <div class="panel upload-panel">
+                <h2>Document Upload</h2>
+
+                <!-- Sample Documents -->
+                <div class="sample-docs">
+                    <h3>Try Sample Documents:</h3>
+                    <div id="sampleDocsList"></div>
+                </div>
+
+                <!-- Manual Upload -->
+                <div class="upload-form">
+                    <h3>Or Upload Custom:</h3>
+                    <input type="text" id="docTitle" placeholder="Document Title" class="form-input">
+                    <input type="text" id="docAuthor" placeholder="Author Name" class="form-input">
+                    <input type="date" id="docDate" class="form-input">
+                    <button onclick="uploadCustomDocument()" class="btn btn-primary">Upload Document</button>
+                </div>
+
+                <!-- Processing Queue -->
+                <div class="queue-section">
+                    <h3>Processing Queue (<span id="queueCount">0</span>)</h3>
+                    <div id="queueList" class="queue-list"></div>
+                </div>
+            </div>
+
+            <!-- Middle Panel: Live Processing -->
+            <div class="panel processing-panel">
+                <h2>Live Processing View</h2>
+                <div id="processingView" class="processing-view">
+                    <div class="empty-state">
+                        <p>👆 Select a document to begin processing</p>
+                    </div>
+                </div>
+
+                <!-- AI Agent Output -->
+                <div id="aiOutput" class="ai-output" style="display: none;">
+                    <h3>🤖 AI Agent Analysis</h3>
+                    <div id="aiAnalysis" class="ai-analysis"></div>
+                </div>
+
+                <!-- Results -->
+                <div id="resultsSection" class="results-section" style="display: none;">
+                    <h3>Results</h3>
+                    <div id="resultsContent"></div>
+                </div>
+            </div>
+
+            <!-- Right Panel: Statistics -->
+            <div class="panel stats-panel">
+                <h2>Statistics Dashboard</h2>
+
+                <div class="stat-card">
+                    <div class="stat-label">Documents Processed</div>
+                    <div class="stat-value" id="statProcessed">0</div>
+                </div>
+
+                <div class="stat-card success">
+                    <div class="stat-label">Success Rate</div>
+                    <div class="stat-value" id="statSuccessRate">0%</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-label">Avg Processing Time</div>
+                    <div class="stat-value" id="statAvgTime">0s</div>
+                </div>
+
+                <div class="stat-card highlight">
+                    <div class="stat-label">Time Saved</div>
+                    <div class="stat-value" id="statTimeSaved">0 min</div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-label">Time Savings</div>
+                    <div class="stat-value" id="statSavingsPercent">0%</div>
+                </div>
+
+                <!-- ROI Calculator -->
+                <div class="roi-section">
+                    <h3>ROI Projection</h3>
+                    <div class="roi-details">
+                        <div class="roi-item">
+                            <span>Docs/Period:</span>
+                            <span id="roiDocs">34</span>
+                        </div>
+                        <div class="roi-item">
+                            <span>Minutes Saved:</span>
+                            <span id="roiMinutes">40.4</span>
+                        </div>
+                        <div class="roi-item">
+                            <span>Annual Savings:</span>
+                            <span id="roiAmount" class="roi-amount">$3,820</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reset Button -->
+                <button onclick="resetDemo()" class="btn btn-secondary btn-reset">Reset Demo</button>
+            </div>
+        </div>
+
+        <!-- Recent Activity Log -->
+        <div class="activity-log">
+            <h2>Recent Activity</h2>
+            <div id="activityLog" class="log-list">
+                <div class="log-item">
+                    <span class="log-time">Ready</span>
+                    <span class="log-message">System initialized and ready for processing</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
