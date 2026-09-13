@@ -1,0 +1,9 @@
+{
+  "selectedProcess": "microsoft_edge_microsoft_word",
+  "reason": "Highest impact despite complexity",
+  "prototypeScope": "Standard document processing workflow",
+  "expectedAutomationRate": "60-70%",
+  "timeSavingsPotential": "~68 minutes per period",
+  "manualWorkRemaining": "Complex cases, exceptions, review",
+  "expansionPath": "Other document types after validation"
+}
