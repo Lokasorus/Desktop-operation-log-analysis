@@ -1,0 +1,40 @@
+# Configuration for Document Processing Automation
+
+# Document source configuration
+document_source: "mock"  # Options: "mock", "sharepoint", "onedrive"
+
+# Validation rules
+validation_rules:
+  required_fields:
+    - title
+    - author
+    - date
+
+  max_file_size_mb: 50
+
+  allowed_formats:
+    - docx
+    - pdf
+
+  # Additional custom rules can be added here
+  # custom_checks:
+  #   - check_author_in_directory
+  #   - verify_department_code
+
+# Notification configuration
+notification:
+  teams_webhook: "https://your-org.webhook.office.com/webhookb2/..."
+  email_enabled: false
+  email_recipients:
+    - approvals@example.com
+
+# Error handling
+error_handling:
+  max_retries: 3
+  retry_delay_seconds: 5
+  continue_on_error: true
+
+# Logging
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  retention_days: 30
