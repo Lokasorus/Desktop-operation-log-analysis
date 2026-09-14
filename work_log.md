@@ -100,6 +100,18 @@ python automation_tool/tests/test_scenarios.py
 
 **Time:** 17:30 - Day 4 complete
 
+### Demo-App Foundation
+
+**Completed:**
+- Added the Flask demo server and browser-based document processing workflow
+- Added the static dashboard UI for upload, queue, validation, and results views
+- Added demo-mode and AI-enabled agent integrations
+- Added Windows startup and dependency installation scripts
+
+**Validation:**
+- Confirmed the demo can run in local demo mode without an API key
+- Kept the Day 4 package focused on runnable application files and documentation
+
 ---
 
 ## Day 4 Summary
