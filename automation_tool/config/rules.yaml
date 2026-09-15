@@ -23,7 +23,7 @@ validation_rules:
 
 # Notification configuration
 notification:
-  teams_webhook: "https://your-org.webhook.office.com/webhookb2/..."
+  teams_webhook: "mock"
   email_enabled: false
   email_recipients:
     - approvals@example.com
@@ -31,7 +31,7 @@ notification:
 # Error handling
 error_handling:
   max_retries: 3
-  retry_delay_seconds: 5
+  retry_delay_seconds: 1
   continue_on_error: true
 
 # Logging

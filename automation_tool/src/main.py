@@ -7,15 +7,22 @@ Uses mock APIs since real SharePoint/Teams aren't available in dev.
 import time
 import logging
 from datetime import datetime
-from typing import List, Dict, Optional
-import json
+from typing import List, Dict
+from pathlib import Path
+import yaml
 
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+LOG_DIR = PROJECT_ROOT / 'logs'
+LOG_DIR.mkdir(parents=True, exist_ok=True)
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler(f'../logs/automation_{datetime.now().strftime("%Y%m%d")}.log'),
+        logging.FileHandler(
+            LOG_DIR / f'automation_{datetime.now().strftime("%Y%m%d")}.log',
+            encoding='utf-8'
+        ),
         logging.StreamHandler()
     ]
 )
@@ -141,37 +148,51 @@ class NotificationService:
     def _send_teams_message(self, document: Dict, validation_result: Dict) -> bool:
         """Real Teams webhook implementation"""
         import requests
-        try:
-            message = {
-                "@type": "MessageCard",
-                "summary": f"Document {document['id']} processed",
-                "sections": [{
-                    "activityTitle": f"Document: {document['title']}",
-                    "facts": [
-                        {"name": "Author", "value": document.get('author', 'Unknown')},
-                        {"name": "Date", "value": document.get('date', 'Unknown')},
-                        {"name": "Status", "value": "APPROVED" if validation_result['valid'] else "REJECTED"}
-                    ]
-                }]
-            }
-            response = requests.post(self.webhook, json=message)
-            return response.status_code == 200
-        except Exception as e:
-            logger.error(f"Failed to send Teams notification: {e}")
-            return False
+        message = {
+            "@type": "MessageCard",
+            "summary": f"Document {document['id']} processed",
+            "sections": [{
+                "activityTitle": f"Document: {document['title']}",
+                "facts": [
+                    {"name": "Author", "value": document.get('author', 'Unknown')},
+                    {"name": "Date", "value": document.get('date', 'Unknown')},
+                    {"name": "Status", "value": "APPROVED" if validation_result['valid'] else "REJECTED"}
+                ]
+            }]
+        }
+        max_retries = int(self.config.get('max_retries', 3))
+        retry_delay = float(self.config.get('retry_delay_seconds', 1))
+        for attempt in range(max_retries + 1):
+            try:
+                response = requests.post(self.webhook, json=message, timeout=10)
+                if response.status_code == 200:
+                    return True
+                logger.warning(
+                    f"Teams notification returned HTTP {response.status_code} "
+                    f"on attempt {attempt + 1}"
+                )
+            except requests.RequestException as error:
+                logger.warning(
+                    f"Teams notification failed on attempt {attempt + 1}: {error}"
+                )
+            if attempt < max_retries:
+                time.sleep(retry_delay)
+        return False
 
 
 class AutomationOrchestrator:
     """Main orchestrator for the automation workflow"""
 
-    def __init__(self, config_path='../config/rules.yaml'):
+    def __init__(self, config_path=None):
         # Load configuration
         self.config = self._load_config(config_path)
 
         # Initialize components
         self.fetcher = DocumentFetcher(self.config)
         self.validator = DocumentValidator(self.config.get('validation_rules', {}))
-        self.notifier = NotificationService(self.config.get('notification', {}))
+        notification_config = dict(self.config.get('notification', {}))
+        notification_config.update(self.config.get('error_handling', {}))
+        self.notifier = NotificationService(notification_config)
 
         # Statistics
         self.stats = {
@@ -185,18 +206,17 @@ class AutomationOrchestrator:
 
     def _load_config(self, config_path):
         """Load configuration from file"""
-        # For prototype, use hardcoded config
-        return {
-            'document_source': 'mock',
-            'validation_rules': {
-                'required_fields': ['title', 'author', 'date'],
-                'max_file_size_mb': 50,
-                'allowed_formats': ['docx', 'pdf']
-            },
-            'notification': {
-                'teams_webhook': 'mock'
-            }
-        }
+        config_file = Path(config_path) if config_path else PROJECT_ROOT / 'config' / 'rules.yaml'
+        if not config_file.is_absolute():
+            config_file = Path.cwd() / config_file
+        if not config_file.exists():
+            raise FileNotFoundError(f"Configuration file not found: {config_file}")
+
+        with config_file.open('r', encoding='utf-8') as stream:
+            config = yaml.safe_load(stream) or {}
+        if not isinstance(config, dict):
+            raise ValueError(f"Configuration must be a YAML mapping: {config_file}")
+        return config
 
     def process_document(self, document: Dict, dry_run=False) -> Dict:
         """Process a single document"""
@@ -220,7 +240,7 @@ class AutomationOrchestrator:
             result['errors'] = errors
 
             if is_valid:
-                logger.info(f"✓ Document {doc_id} passed validation")
+                logger.info(f"[OK] Document {doc_id} passed validation")
 
                 if not dry_run:
                     # Send notification
@@ -232,7 +252,7 @@ class AutomationOrchestrator:
 
                 self.stats['successful'] += 1
             else:
-                logger.warning(f"✗ Document {doc_id} failed validation: {', '.join(errors)}")
+                logger.warning(f"[FAILED] Document {doc_id} failed validation: {', '.join(errors)}")
                 self.stats['failed'] += 1
 
         except Exception as e:

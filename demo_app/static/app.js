@@ -12,10 +12,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     await loadSampleDocuments();
     await updateStatistics();
     await updateQueue();
+    await updateAuditLogs();
 
     // Auto-refresh
     setInterval(updateStatistics, 5000);
     setInterval(updateQueue, 3000);
+    setInterval(updateAuditLogs, 3000);
 });
 
 async function loadConfig() {
@@ -23,7 +25,7 @@ async function loadConfig() {
     config = await response.json();
 
     const modeText = config.ai_enabled ?
-        '🤖 AI Agent Active (Claude)' :
+        `🤖 AI Agent Active (${config.ai_provider})` :
         '🎭 Demo Mode (Simulated)';
     document.getElementById('modeIndicator').textContent = modeText;
 }
@@ -154,6 +156,7 @@ async function processDocument(docId) {
             showResults(result);
             await updateStatistics();
             await updateQueue();
+            await updateAuditLogs();
         } else {
             addLog(`✗ Error processing document: ${result.error}`);
         }
@@ -258,6 +261,24 @@ async function updateStatistics() {
     document.getElementById('statAvgTime').textContent = metrics.avg_processing_time + 's';
     document.getElementById('statTimeSaved').textContent = metrics.total_minutes_saved + ' min';
     document.getElementById('statSavingsPercent').textContent = metrics.time_savings_percent + '%';
+}
+
+async function updateAuditLogs() {
+    const response = await fetch('/api/logs');
+    const data = await response.json();
+    const logEl = document.getElementById('activityLog');
+
+    if (data.logs.length === 0) {
+        logEl.innerHTML = '<div class="log-item"><span class="log-message">No completed operations</span></div>';
+        return;
+    }
+
+    logEl.innerHTML = data.logs.map(log => `
+        <div class="log-item">
+            <span class="log-time">${new Date(log.timestamp).toLocaleTimeString()}</span>
+            <span class="log-message">${log.document_id}: ${log.status} - ${log.title} (${log.processing_time.toFixed(2)}s)</span>
+        </div>
+    `).join('');
 }
 
 async function resetDemo() {

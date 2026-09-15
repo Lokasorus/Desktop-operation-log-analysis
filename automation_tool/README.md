@@ -36,30 +36,28 @@ This tool automates the document processing workflow identified in Dataset B ana
 ```
 automation_tool/
 ├── src/
-│   ├── main.py              # Main orchestrator
-│   ├── document_fetcher.py  # Document retrieval
-│   ├── validator.py         # Validation rules engine
-│   ├── notifier.py         # Notification service
-│   └── config.py           # Configuration loader
+│   └── main.py              # Fetcher, validator, notifier, and orchestrator
 ├── config/
 │   └── rules.yaml          # Validation rules
 ├── tests/
 │   └── test_scenarios.py   # Test cases
+├── requirements.txt         # Python dependencies
 ├── logs/                   # Audit trail
 └── README.md              # This file
 ```
 
 ### Design Decisions
 
-**Hybrid Approach:**
-- **API-based** where possible (SharePoint, Teams APIs)
-- **RPA fallback** for gaps (browser automation)
-- **Why:** Balance between robustness and implementation speed
+**Prototype boundary:**
+- The current implementation uses a deterministic mock document source.
+- Teams notification delivery is implemented through a configurable webhook with retries.
+- SharePoint retrieval and browser-based RPA are production follow-up work, not implemented in this prototype.
+- **Why:** The available environment does not provide production credentials or systems.
 
 **Mock Services in Prototype:**
-- Real APIs not available in dev environment
-- Mock classes implement same interface
-- Easy swap for production: change config, not code
+- Real document APIs are not available in the development environment.
+- The mock source and production adapter share the fetcher boundary.
+- The YAML file is loaded at startup, so validation and retry settings can be changed without editing Python code.
 
 ---
 
@@ -68,19 +66,19 @@ automation_tool/
 ### Prerequisites
 ```bash
 # Python 3.8+
-pip install pyyaml requests selenium
+pip install -r requirements.txt
 ```
 
 ### Configuration
 Edit `config/rules.yaml`:
 ```yaml
-document_source: "sharepoint"  # or "mock" for testing
+document_source: "mock"  # SharePoint adapter is not implemented yet
 validation_rules:
-  - required_fields: [title, author, date]
-  - max_file_size_mb: 50
-  - allowed_formats: [docx, pdf]
+  required_fields: [title, author, date]
+  max_file_size_mb: 50
+  allowed_formats: [docx, pdf]
 notification:
-  teams_webhook: "https://your-webhook-url"
+  teams_webhook: "mock"
 ```
 
 ---
@@ -121,12 +119,12 @@ python tests/test_scenarios.py
 2. ✓ Missing author field
 3. ✓ Oversized file
 4. ✓ Invalid format
-5. ✓ Network timeout simulation
 
-**Test Results (2026-09-12):**
-- Success rate: 70% (7/10 handled correctly)
-- Average processing time: 8 seconds
-- Error handling: All failures logged appropriately
+**Current test results:**
+- Validation: 4/4 cases passed
+- Full workflow: 3 documents processed, 2 valid and 1 rejected
+- Success rate: 66.7% for the bundled sample documents
+- Logging works from the repository-root command and writes UTF-8 logs to `automation_tool/logs/`
 
 ---
 
@@ -167,7 +165,8 @@ Annual savings (assuming 250 work days):
 ✓ Validation rule engine
 ✓ Error handling framework
 ✓ Audit logging
-✓ Configuration management
+✓ YAML configuration loading and validation
+✓ Configured retry handling for webhook notifications
 
 ### What Needs Work
 ⚠️ **Authentication:** Real OAuth/SSO integration for SharePoint/Teams

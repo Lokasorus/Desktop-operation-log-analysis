@@ -94,6 +94,7 @@ def get_config():
     return jsonify({
         'demo_mode': DEMO_MODE,
         'ai_enabled': AI_ENABLED,
+        'ai_provider': 'Groq/Llama 3.1' if AI_ENABLED else None,
         'features': {
             'document_upload': True,
             'ai_processing': AI_ENABLED,

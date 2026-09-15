@@ -247,9 +247,9 @@ Most executions cluster around 2 minutes - a targetable pattern.
    - Pros: Robust, maintainable
    - Cons: Requires API setup, authentication complexity
    
-3. **Hybrid (API + RPA fallback):** ✅ **Selected**
+3. **Hybrid (API + RPA fallback):** ✅ **Selected as the production direction**
    - Pros: Best of both worlds
-   - Cons: More complex but production-ready
+  - Cons: More complex and not fully implemented in this prototype
 
 ### Architecture
 
@@ -328,7 +328,7 @@ When `AI_ENABLED=true` and `GROQ_API_KEY` is available, the server uses the Llam
 ### What It Does
 
 **Automated steps:**
-1. Fetch documents from repository (via API or web scraping)
+1. Fetch documents from the deterministic mock repository adapter
 2. Extract metadata (title, author, date, size, format)
 3. Validate against business rules
 4. Send notification if passed
@@ -350,7 +350,8 @@ When `AI_ENABLED=true` and `GROQ_API_KEY` is available, the server uses the Llam
 - ✅ Time savings potential
 
 **What still needs work for production:**
-- ⚠️ Real API authentication (OAuth/SSO)
+- ⚠️ Real SharePoint/OneDrive retrieval and OAuth/SSO authentication
+- ⚠️ RPA/browser fallback for systems without APIs
 - ⚠️ Comprehensive edge cases
 - ⚠️ User monitoring interface
 - ⚠️ Security review and compliance
