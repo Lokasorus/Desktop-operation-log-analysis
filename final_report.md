@@ -636,7 +636,7 @@ We recommend proceeding with pilot deployment and look forward to tracking resul
 
 - ✅ segments.jsonl (64 segments, validated format)
 - ✅ Full repository with code and documentation
-- ✅ Git history showing the staged progression through Day 5
+- ✅ Git history showing the staged project progression
 - ✅ Work log documenting decisions and challenges
 - ✅ Final report (this document)
 - ✅ Working automation prototype
@@ -658,7 +658,7 @@ We recommend proceeding with pilot deployment and look forward to tracking resul
 ### C. References
 
 **Files in Repository:**
-- `segments.jsonl` - Step 1 output (excluded from the repository per the submission plan)
+- `segments.jsonl` - Step 1 output, generated and validated locally; excluded from Git by the packaging plan
 - `src/finalSegmenter.js` - Segmentation algorithm
 - `automation_tool/` - Step 3 prototype
 - `work_log.md` - Daily progress

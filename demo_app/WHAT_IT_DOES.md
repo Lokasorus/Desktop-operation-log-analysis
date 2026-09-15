@@ -1,117 +1,62 @@
-# What Does This Demo Application Do?
+# What This Demo Application Does
 
-## Overview
+## Purpose
 
-This is a **web-based demonstration** of the document processing automation system you built during your internship. It transforms your backend automation work into an interactive, visual application that anyone can see and use.
+This Flask web demo makes the selected document-processing automation workflow visible. It is a deterministic prototype for the project proposal, not a production SharePoint or RPA integration.
 
-## The Problem It Solves
+The project analysis found a 118-second median manual processing time for the selected workflow. The demo compares that baseline with its own measured validation time and keeps the final approval decision under human control.
 
-During your internship, you discovered that manual document processing takes **118 seconds per document** on average. Your automation reduces this to **8 seconds** - a **93% time savings**.
+## Workflow
 
-This demo app makes that automation **visible and tangible** by:
-1. Showing documents being processed in real-time
-2. Displaying the time savings visually
-3. Calculating ROI metrics
-4. Demonstrating AI-powered validation
+1. A sample document or metadata record is submitted.
+2. The document enters an in-memory queue and receives a unique ID.
+3. Deterministic validation checks required metadata, file size, and format.
+4. Optional Groq/Llama processing can extract metadata and provide reasoning.
+5. A valid document becomes `READY FOR APPROVAL`.
+6. A human approves or rejects the document in the dashboard.
+7. Invalid documents become `NEEDS REVIEW` and cannot be approved through the API.
+8. The decision and processing result appear in the audit log.
 
-## What It Does - Step by Step
+## Included Scenarios
 
-### 1. **Document Upload Interface**
-- Users can upload documents (or use 3 pre-loaded samples)
-- Each document has: title, author, date, file size, format
-- Documents enter a processing queue
+### Q4 Budget Proposal
 
-### 2. **Automated Validation**
-The system automatically checks each document against validation rules:
-- ✅ Must have: title, author, date
-- ✅ File size must be ≤ 50 MB
-- ✅ Format must be: docx or pdf
+Complete metadata and an allowed DOCX format. It demonstrates the valid path and the explicit human approval gate.
 
-### 3. **AI Agent Processing** (When Enabled)
-An AI agent analyzes the document and:
-- Extracts missing metadata (e.g., finds author in document content)
-- Assesses document quality
-- Makes a recommendation: APPROVED, NEEDS_REVIEW, or REJECTED
-- Provides reasoning and confidence score
-- Explains decisions in plain English
+### Marketing Campaign Brief
 
-### 4. **Real-Time Results**
-The dashboard shows:
-- **Processing status** - Watch documents move through the pipeline
-- **Success/failure statistics** - Track how many documents pass validation
-- **Time savings** - Compare manual time (118s) vs automated time (~2-8s)
-- **ROI calculation** - Shows annual savings in dollars
+Missing author metadata. It demonstrates validation failure, manual review, and protection against automatic approval.
 
-### 5. **Activity Log**
-Every action is logged with timestamps showing:
-- Which documents were processed
-- What decisions were made
-- How long each one took
+### Employee Handbook Update
 
-## How It Relates to Your Internship Work
+Complete metadata and an allowed PDF format. It demonstrates another valid document path.
 
-Your internship involved 7 days of work:
-- **Day 1-2:** Analysis and problem identification
-- **Day 3:** Building automation prototype (Python scripts)
-- **Day 4-7:** Testing, documentation, presentation
+## Project Alignment
 
-**This demo app is Day 8** - turning your working prototype into a professional web application that:
-- Makes your work visible to non-technical people
-- Shows real-time processing instead of just logs
-- Demonstrates business value (time savings, ROI)
-- Can be used in interviews or presentations
+The demo supports the project requirements by showing:
 
-## Three Scenarios Built-In
+- The highest-impact document workflow selected from Dataset B.
+- Rule-based automation for predictable checks.
+- Optional AI assistance without making AI the final authority.
+- Human review for exceptions and final approval.
+- Auditability through decision and processing logs.
+- A reproducible demo mode that requires no production credentials.
 
-The app includes 3 sample documents to demonstrate different outcomes:
+## What Is Not Implemented
 
-### Scenario 1: Happy Path ✅
-- **Document:** "Q4 Budget Proposal"
-- **Status:** All fields complete, valid format
-- **Result:** APPROVED immediately
-- **Demonstrates:** Normal successful processing
+- Real SharePoint or OneDrive retrieval
+- Real Teams notification delivery from this browser demo
+- RPA/browser automation against desktop applications
+- Persistent database storage
+- Binary document upload and content extraction
 
-### Scenario 2: Missing Data ⚠️
-- **Document:** "Marketing Campaign Brief"
-- **Status:** Missing author field
-- **Result:** In demo mode: NEEDS_REVIEW | With AI: Extracts author from content
-- **Demonstrates:** Error handling and AI assistance
-
-### Scenario 3: Complex Validation 🤖
-- **Document:** "Employee Handbook Update"
-- **Status:** Large file, complete metadata
-- **Result:** AI analyzes quality and makes recommendation
-- **Demonstrates:** AI decision-making with reasoning
-
-## Why This Matters
-
-**Before (Your internship):**
-- Python scripts running in terminal
-- Output is text logs
-- Hard to show to non-technical people
-- Difficult to understand the impact
-
-**After (This demo app):**
-- Beautiful web interface
-- Visual, interactive demonstration
-- Clear ROI metrics ($3,820 annual savings)
-- Perfect for presentations and interviews
+Those are production follow-up items. The prototype intentionally demonstrates the workflow boundary and governance model without pretending to have access to the client systems.
 
 ## Technical Stack
 
-- **Frontend:** HTML, CSS, JavaScript (no build tools needed)
-- **Backend:** Python Flask (simple REST API)
-- **AI:** Pluggable - supports Anthropic Claude, Groq (Llama), or demo mode
-- **Data:** In-memory (no database needed for demo)
+- Frontend: vanilla HTML, CSS, and JavaScript
+- Backend: Python Flask
+- Optional AI: Groq API with Llama 3.1 8B
+- Storage: in-memory Python collections
 
-## Next Steps
-
-We're now going to:
-1. ✅ Add a FREE AI provider (Groq with Llama 3.1) so you get real AI processing
-2. ✅ Polish the UI to make it even more professional
-3. ✅ Write testing guides so you know how to demo it
-4. ✅ Add it to your work log documentation
-
----
-
-**Think of this as your internship project's "portfolio piece"** - it shows what you built in a way that's impressive and easy to understand!
+See `README.md` for startup instructions and `TESTING_GUIDE.md` for the complete manual and API test sequence.

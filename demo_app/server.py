@@ -1,9 +1,5 @@
-"""
-Flask server for Document Processing Automation Demo
-Includes AI agent integration with Anthropic Claude
-"""
-from flask import Flask, render_template, request, jsonify, send_from_directory
-import json
+"""Flask server for the document-processing automation demo."""
+from flask import Flask, request, jsonify, send_from_directory
 import time
 import os
 from datetime import datetime
@@ -18,6 +14,7 @@ AI_ENABLED = os.getenv('AI_ENABLED', 'false').lower() == 'true'
 # In-memory storage for demo
 processing_queue = []
 completed_documents = []
+next_document_id = 1
 statistics = {
     'total_processed': 0,
     'successful': 0,
@@ -42,15 +39,9 @@ if AI_ENABLED:
             AI_ENABLED = False
             DEMO_MODE = True
     except ImportError:
-        try:
-            # Fallback to Anthropic if available
-            from ai_agent import DocumentAIAgent
-            ai_agent = DocumentAIAgent()
-            print("✓ AI Agent initialized (Claude API)")
-        except ImportError:
-            print("⚠ AI agent module not found, using demo mode")
-            AI_ENABLED = False
-            DEMO_MODE = True
+        print("⚠ Groq/Llama agent module not found, using demo mode")
+        AI_ENABLED = False
+        DEMO_MODE = True
 
 # Sample documents for demo
 SAMPLE_DOCS = [
@@ -111,11 +102,14 @@ def get_sample_documents():
 @app.route('/api/upload', methods=['POST'])
 def upload_document():
     """Handle document upload"""
+    global next_document_id
     data = request.json
+    if not isinstance(data, dict):
+        return jsonify({'success': False, 'error': 'JSON document data is required'}), 400
 
     # Create document record
     doc = {
-        'id': f"DOC{len(processing_queue) + 1:03d}",
+        'id': f"DOC{next_document_id:03d}",
         'title': data.get('title', 'Untitled Document'),
         'author': data.get('author'),
         'date': data.get('date', datetime.now().strftime('%Y-%m-%d')),
@@ -125,6 +119,7 @@ def upload_document():
         'uploaded_at': datetime.now().isoformat(),
         'status': 'pending'
     }
+    next_document_id += 1
 
     processing_queue.append(doc)
 
@@ -172,7 +167,7 @@ def process_document(doc_id):
         statistics['failed'] += 1
 
     # Update document status
-    doc['status'] = 'completed'
+    doc['status'] = 'awaiting_approval' if result['valid'] else 'needs_review'
     doc['result'] = result
     doc['processing_time'] = processing_time
     doc['completed_at'] = datetime.now().isoformat()
@@ -189,6 +184,27 @@ def process_document(doc_id):
         'processing_time': round(processing_time, 2),
         'time_saved': round(manual_time - processing_time, 2)
     })
+
+@app.route('/api/decision/<doc_id>', methods=['POST'])
+def record_decision(doc_id):
+    """Record the human decision after automated validation."""
+    data = request.json or {}
+    decision = data.get('decision', '').lower()
+    if decision not in {'approve', 'reject'}:
+        return jsonify({'success': False, 'error': 'Decision must be approve or reject'}), 400
+
+    doc = next((item for item in completed_documents if item['id'] == doc_id), None)
+    if not doc:
+        return jsonify({'success': False, 'error': 'Completed document not found'}), 404
+    if doc.get('decision'):
+        return jsonify({'success': False, 'error': 'A final decision has already been recorded'}), 409
+    if decision == 'approve' and not doc['result']['valid']:
+        return jsonify({'success': False, 'error': 'Documents with validation errors require review'}), 409
+
+    doc['status'] = 'approved' if decision == 'approve' else 'rejected'
+    doc['decision'] = decision
+    doc['decided_at'] = datetime.now().isoformat()
+    return jsonify({'success': True, 'document': doc})
 
 def process_demo_mode(doc):
     """Process document in demo mode (no AI)"""
@@ -209,7 +225,7 @@ def process_demo_mode(doc):
         'valid': is_valid,
         'errors': errors,
         'ai_analysis': None,
-        'recommendation': 'APPROVED' if is_valid else 'NEEDS REVIEW',
+        'recommendation': 'READY FOR APPROVAL' if is_valid else 'NEEDS REVIEW',
         'confidence': 0.95 if is_valid else 0.60,
         'reasoning': 'All validation checks passed' if is_valid else 'Failed validation checks'
     }
@@ -255,6 +271,7 @@ def get_logs():
             'document_id': doc['id'],
             'title': doc['title'],
             'status': doc['result']['recommendation'],
+            'decision': doc.get('decision'),
             'processing_time': doc.get('processing_time', 0)
         })
 
@@ -263,9 +280,10 @@ def get_logs():
 @app.route('/api/reset', methods=['POST'])
 def reset_demo():
     """Reset demo state"""
-    global processing_queue, completed_documents, statistics
+    global processing_queue, completed_documents, next_document_id, statistics
     processing_queue = []
     completed_documents = []
+    next_document_id = 1
     statistics = {
         'total_processed': 0,
         'successful': 0,

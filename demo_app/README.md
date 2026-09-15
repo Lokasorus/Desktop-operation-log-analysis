@@ -38,8 +38,8 @@ The server reads `AI_ENABLED` and `GROQ_API_KEY` from the environment. Without a
 
 ## Features
 
-### 1. Document Upload Interface
-- Drag & drop documents
+### 1. Document Submission Interface
+- Submit sample documents or metadata through the form
 - See them get processed in real-time
 - Visual feedback on validation status
 
@@ -57,9 +57,13 @@ The server reads `AI_ENABLED` and `GROQ_API_KEY` from the environment. Without a
 - ROI metrics
 
 ### 4. Admin Panel
-- Configure validation rules
-- View audit logs
-- Export results
+- View the in-memory audit log
+- Reset the demo state
+
+### 5. Human Approval Gate
+- Validated documents are marked `READY FOR APPROVAL`
+- A human can approve or reject them in the dashboard
+- Invalid documents remain in `NEEDS REVIEW` and cannot be auto-approved
 
 ## Demo Scenarios
 
@@ -67,16 +71,16 @@ The app includes 3 pre-loaded demo scenarios:
 
 1. **Happy Path** - Document passes all checks
 2. **Missing Data** - Document fails validation (missing author)
-3. **AI Assisted** - AI helps extract missing information
+3. **AI Assisted** - Optional AI can help extract missing information; the rule-based fallback remains available
 
 ## Perfect for Interview Demo
 
 **Show this during your presentation:**
 1. Open the web app
 2. Upload a sample document
-3. Watch the AI agent process it
-4. Show the time savings (118s → 8s)
-5. Display the ROI dashboard
+3. Watch automated validation process it
+4. Review the result and make the human approval decision
+5. Show the audit log and ROI dashboard
 
 **Impact:** Makes your prototype tangible and impressive! 🚀
 
@@ -106,16 +110,14 @@ The app includes 3 pre-loaded demo scenarios:
 ```
 demo_app/
 ├── server.py              # Flask backend
-├── ai_agent.py           # Claude AI integration
+├── free_ai_agent.py       # Optional Groq/Llama integration
+├── ai_agent.py            # Legacy optional agent module
 ├── static/
 │   ├── index.html        # Main UI
 │   ├── style.css         # Styling
 │   └── app.js            # Frontend logic
-├── sample_documents/      # Demo documents
-│   ├── budget_proposal.json
-│   ├── handbook_update.json
-│   └── campaign_brief.json
-└── config.py             # Configuration
+├── install_dependencies.bat
+└── start_demo.bat
 ```
 
 ## API Endpoints
@@ -124,9 +126,11 @@ demo_app/
 GET  /                    # Main UI
 POST /api/upload          # Upload document
 GET  /api/queue           # Get processing queue
-POST /api/process         # Process with AI
+POST /api/process/<id>    # Run validation/AI processing
+POST /api/decision/<id>   # Record human approval decision
 GET  /api/stats           # Get statistics
 GET  /api/logs            # Get audit logs
+POST /api/reset           # Reset in-memory demo state
 ```
 
 ## Running the Demo
@@ -150,8 +154,8 @@ The server will start on http://localhost:5000
 
 ✅ **Visual** - Not just code, actual working UI
 ✅ **Interactive** - Can upload and process documents
-✅ **AI-Powered** - Shows Claude integration
-✅ **Real Metrics** - Displays actual time savings
+✅ **AI-Powered** - Optionally shows Groq/Llama integration
+✅ **Real Metrics** - Displays the 118-second manual baseline and measured demo time
 ✅ **Professional** - Looks like a real product
 ✅ **Easy to Demo** - Just open browser and show
 

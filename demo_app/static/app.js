@@ -190,6 +190,14 @@ function showResults(result) {
     const statusClass = res.valid ? 'success' : 'error';
     const statusIcon = res.valid ? '✅' : '❌';
 
+    const decisionControls = doc.status === 'awaiting_approval' ? `
+        <div class="decision-controls">
+            <p>Validation passed. Final approval remains a human decision.</p>
+            <button onclick="recordDecision('${doc.id}', 'approve')" class="btn btn-primary">Approve</button>
+            <button onclick="recordDecision('${doc.id}', 'reject')" class="btn btn-secondary">Reject</button>
+        </div>
+    ` : `<p class="decision-state">${doc.status === 'needs_review' ? 'Manual review required.' : `Decision recorded: ${doc.status}.`}</p>`;
+
     document.getElementById('resultsContent').innerHTML = `
         <div class="result-card ${statusClass}">
             <h3>${statusIcon} ${res.recommendation}</h3>
@@ -225,8 +233,30 @@ function showResults(result) {
             <div class="reasoning">
                 <strong>Reasoning:</strong> ${res.reasoning}
             </div>
+            ${decisionControls}
         </div>
     `;
+}
+
+async function recordDecision(docId, decision) {
+    const response = await fetch(`/api/decision/${docId}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ decision })
+    });
+    const result = await response.json();
+    if (!result.success) {
+        addLog(`Decision error: ${result.error}`);
+        return;
+    }
+    addLog(`Decision recorded: ${result.document.id} ${decision}`);
+    showResults({
+        document: result.document,
+        result: result.document.result,
+        processing_time: result.document.processing_time,
+        time_saved: 118 - result.document.processing_time
+    });
+    await updateAuditLogs();
 }
 
 async function updateQueue() {

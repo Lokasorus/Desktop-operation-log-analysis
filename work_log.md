@@ -111,6 +111,9 @@ python automation_tool/tests/test_scenarios.py
 **Validation:**
 - Confirmed the demo can run in local demo mode without an API key
 - Kept the Day 4 package focused on runnable application files and documentation
+
+---
+
 ## Day 3 - 2026-09-12
 
 ### Morning: Automation Tool Design
@@ -199,7 +202,6 @@ Realized we can't actually access real SharePoint/Teams in this environment. Thi
 - Logs all operations for audit trail
 - Supports dry-run mode (no actual changes)
 
-**Testing approach:**
 **Testing approach:**
 Since production APIs are unavailable, used the three bundled mock documents plus focused validation cases:
 - Two valid documents and one missing-author case
@@ -303,6 +305,10 @@ What still needs work for production:
 - Final review
 
 **Status:** Ahead of schedule, all technical work complete
+
+### Generative AI Use
+
+Used generative AI as a review and implementation aid for code-path inspection, documentation consistency checks, and focused validation planning. All reported metrics and implementation claims were checked against the repository and runnable tests.
 
 ---
 
@@ -424,7 +430,6 @@ What still needs work for production:
 **Time:** 11:00 - Packaging complete
 
 ---
-
 
 ---
 
