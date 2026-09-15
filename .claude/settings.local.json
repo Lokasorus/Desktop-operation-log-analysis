@@ -16,7 +16,14 @@
       "Bash(timeout 60 node src/finalSegmenter.js dataset_b segments.jsonl)",
       "Bash(node src/batch_segment.js dataset_b segments.jsonl)",
       "Bash(node src/analyze_dataset_b.js)",
-      "Bash(node src/revised_analysis.js)"
+      "Bash(node src/revised_analysis.js)",
+      "Bash(code .)",
+      "Bash(python server.py)",
+      "Bash(curl -s http://localhost:5000/api/config)",
+      "Bash(where python *)",
+      "Bash(cmd.exe *)",
+      "Bash(py --version)",
+      "Bash(py -3 --version)"
     ]
   }
 }

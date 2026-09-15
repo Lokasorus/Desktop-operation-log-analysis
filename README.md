@@ -31,8 +31,8 @@ by whom, or how much time it takes.
 
 ## Goal
 
-**Produce a proposal that maximizes the client's ROI, and demonstrate it with something
-that actually runs.**
+**Produally runs.ce a proposal that maximizes the client's ROI, and demonstrate it with something
+that actu**
 
 Technical accuracy is not the objective in itself. Your judgment is what is being
 assessed — including how you choose to spend your 7 days.
