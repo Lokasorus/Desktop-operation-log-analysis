@@ -324,7 +324,7 @@ What still needs work for production:
 **Key sections drafted:**
 
 **Executive Summary:**
-- 127 process segments identified in Dataset B
+- 64 process segments identified in Dataset B
 - Document workflow selected (67.7% of total time)
 - Prototype demonstrates 93% time savings per document
 - 60-70% automation rate achievable
@@ -341,7 +341,21 @@ What still needs work for production:
 - $3,820 annual savings (conservative estimate)
 - Expansion path to other processes
 
-**Time:** 17:00 - Draft complete
+### Demo-App Integration
+
+**Afternoon validation:**
+- Connected the browser dashboard to the Flask processing API
+- Verified sample-document processing, upload, queue, completed results, statistics, audit logs, and reset flow
+- Added the free Groq/Llama agent path with deterministic rule-based fallback when no API key is configured
+- Confirmed that AI failures return to the same validation path instead of blocking the demo
+- Kept final approval and exception handling as human-controlled steps
+
+**Time:** 17:00 - Day 5 report and demo integration complete
+
+**Day 5 deliverables:**
+- Updated `final_report.md` with findings, scope, manual work, rollout risks, and realistic ROI
+- Updated demo-app documentation and agent integration path
+- Updated this work log with the validated Day 5 workflow
 
 ---
 

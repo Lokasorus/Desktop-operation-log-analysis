@@ -319,6 +319,12 @@ automation_tool/
 └── README.md               (Comprehensive documentation)
 ```
 
+### Browser Demo Integration
+
+The Day 5 demo app exposes the prototype through a Flask API and browser dashboard. It supports sample-document processing, document upload, queue and completed-result views, audit-log inspection, statistics, and resettable demo state. The server runs in deterministic demo mode by default, so the workflow is usable without credentials.
+
+When `AI_ENABLED=true` and `GROQ_API_KEY` is available, the server uses the Llama 3.1 agent through Groq. If the key is missing or an AI request fails, the same validation path falls back to deterministic rule-based processing. Final approval remains human-controlled; missing metadata and other exceptions are surfaced for review.
+
 ### What It Does
 
 **Automated steps:**
@@ -629,7 +635,7 @@ We recommend proceeding with pilot deployment and look forward to tracking resul
 
 - ✅ segments.jsonl (64 segments, validated format)
 - ✅ Full repository with code and documentation
-- ✅ Git history showing 7-day progression
+- ✅ Git history showing the staged progression through Day 5
 - ✅ Work log documenting decisions and challenges
 - ✅ Final report (this document)
 - ✅ Working automation prototype
@@ -651,7 +657,7 @@ We recommend proceeding with pilot deployment and look forward to tracking resul
 ### C. References
 
 **Files in Repository:**
-- `segments.jsonl` - Step 1 output
+- `segments.jsonl` - Step 1 output (excluded from the repository per the submission plan)
 - `src/finalSegmenter.js` - Segmentation algorithm
 - `automation_tool/` - Step 3 prototype
 - `work_log.md` - Daily progress

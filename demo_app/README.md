@@ -6,7 +6,7 @@
 
 A working web application that demonstrates the document processing automation system:
 - **Web UI** - Visual interface to see the automation in action
-- **AI Agent** - Intelligent assistant that processes documents using Claude API
+- **AI Agent** - Optional intelligent assistant using Groq/Llama 3.1
 - **Real-time Demo** - Watch documents get processed automatically
 - **Statistics Dashboard** - See time savings and ROI metrics
 
@@ -14,7 +14,7 @@ A working web application that demonstrates the document processing automation s
 
 - **Frontend:** HTML, CSS, JavaScript (vanilla - no build required)
 - **Backend:** Python Flask server
-- **AI:** Anthropic Claude API for intelligent document processing
+- **AI:** Groq API with Llama 3.1 8B when enabled
 - **Demo Mode:** Works without real APIs (uses simulated data)
 
 ## Quick Start
@@ -26,12 +26,15 @@ python server.py
 ```
 Then open: http://localhost:5000
 
-### Option 2: With Real AI (Requires Anthropic API Key)
+### Option 2: With Real AI (Requires a Groq API Key)
 ```bash
 cd demo_app
-export ANTHROPIC_API_KEY=your-api-key-here
-python server.py --ai-enabled
+set AI_ENABLED=true
+set GROQ_API_KEY=your-api-key-here
+python server.py
 ```
+
+The server reads `AI_ENABLED` and `GROQ_API_KEY` from the environment. Without a valid key, it stays in deterministic demo mode. If an AI request fails during processing, the server falls back to the same rule-based validation used by demo mode.
 
 ## Features
 
@@ -41,7 +44,7 @@ python server.py --ai-enabled
 - Visual feedback on validation status
 
 ### 2. AI Agent Assistant
-- Powered by Claude
+- Powered by Llama 3.1 through Groq
 - Reads document content
 - Extracts metadata intelligently
 - Makes approval recommendations
@@ -130,13 +133,15 @@ GET  /api/logs            # Get audit logs
 
 ```bash
 # Install dependencies
-pip install flask anthropic python-dotenv
+pip install flask requests
 
 # Run in demo mode (no API key needed)
 python server.py
 
-# Or with AI enabled
-python server.py --ai-enabled
+# Or with AI enabled on Windows PowerShell
+$env:AI_ENABLED="true"
+$env:GROQ_API_KEY="your-api-key-here"
+python server.py
 ```
 
 The server will start on http://localhost:5000
